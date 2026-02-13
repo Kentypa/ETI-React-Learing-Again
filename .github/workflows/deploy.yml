@@ -2,36 +2,44 @@ name: Deploy Frontend
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20.19.0
+          node-version: 20
+          cache: "yarn"
+          cache-dependency-path: apps/frontend/yarn.lock
 
-      - name: Install dependencies
+      - name: Install & Build
         run: |
           cd apps/frontend
-          yarn install
+          yarn install --frozen-lockfile
+          yarn build
 
-      - name: Build
-        run: |
-          cd apps/frontend
-          yarn run build
+      - uses: actions/configure-pages@v5
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: apps/frontend/dist
+          path: apps/frontend/dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
