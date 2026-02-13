@@ -9,6 +9,7 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   scrollRestoration: true,
+  basepath: "/ETI-React-Learing-Again/",
 });
 
 declare module "@tanstack/react-router" {
