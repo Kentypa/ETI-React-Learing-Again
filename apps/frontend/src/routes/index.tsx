@@ -11,16 +11,18 @@ export const Route = createFileRoute("/")({
 type CategoryStates = "All" | "React" | "JavaScript";
 
 function HomeComponent() {
-  const [currentTag, setCurrentTag] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<CategoryStates>("All");
 
   const filteredPosts: PostType[] = postsData.filter((post) => {
-    const matchesTag = post.tag
-      .toLowerCase()
-      .includes(currentTag.toLowerCase());
+    const matchesText =
+      post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.tag.toLowerCase().includes(searchQuery.toLowerCase());
+
     const matchesCategory =
       activeCategory === "All" || post.tag === activeCategory;
-    return matchesTag && matchesCategory;
+
+    return matchesText && matchesCategory;
   });
 
   return (
@@ -28,9 +30,9 @@ function HomeComponent() {
       <h1 className="text-2xl font-bold mb-6">News List</h1>
 
       <SearchBar
-        onChange={(event) => setCurrentTag(event.target.value)}
-        value={currentTag}
-        name="tag"
+        onChange={(event) => setSearchQuery(event.target.value)}
+        value={searchQuery}
+        name="search"
       />
 
       <div className="flex gap-4 mb-6">

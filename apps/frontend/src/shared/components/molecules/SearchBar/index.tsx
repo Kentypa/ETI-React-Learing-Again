@@ -9,7 +9,7 @@ type SearchBarProps = {
 export const SearchBar: FC<SearchBarProps> = ({ onChange, value, name }) => {
   return (
     <label className="flex flex-col text-center">
-      Search by tag
+      Search
       <input
         name={name}
         value={value}
