@@ -1,7 +1,7 @@
 export type StudentData = {
   id: number;
   name: string;
-  score: number;
+  score?: number;
 };
 
 export const studentsData: StudentData[] = [
@@ -15,4 +15,5 @@ export const studentsData: StudentData[] = [
   { id: 8, name: "Hannah Davis", score: 89 },
   { id: 9, name: "Ian Wright", score: 93 },
   { id: 10, name: "Julia Roberts", score: 78 },
+  { id: 11, name: "John Doe" },
 ];

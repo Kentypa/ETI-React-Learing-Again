@@ -6,9 +6,11 @@ type StudentsListProps = {
 };
 
 export const StudentsAvarageList: FC<StudentsListProps> = ({ students }) => {
-  const activeStudents = students.filter((student) => student.score >= 60);
+  const activeStudents = students.filter(
+    (student) => (student.score || 0) >= 60,
+  );
   const avgScoreActiveStudents =
-    activeStudents.reduce((acc, current) => (acc += current.score), 0) /
+    activeStudents.reduce((acc, current) => (acc += current.score || 0), 0) /
     activeStudents.length;
 
   return (

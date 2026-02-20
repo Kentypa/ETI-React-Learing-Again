@@ -26,6 +26,14 @@ function RootComponent() {
         >
           Students
         </Link>
+        <Link
+          to="/tab-system"
+          activeProps={{
+            className: "font-bold",
+          }}
+        >
+          Tab system
+        </Link>
       </header>
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />

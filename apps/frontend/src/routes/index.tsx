@@ -3,6 +3,7 @@ import { postsData, type PostType } from "../mock/mock-data";
 import { Post } from "../shared/components/molecules/Post/Post";
 import { useState } from "react";
 import { SearchBar } from "../shared/components/molecules/SearchBar";
+import { Button } from "../shared/components/atoms/Button/Button";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -13,6 +14,7 @@ type CategoryStates = "All" | "React" | "JavaScript";
 function HomeComponent() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<CategoryStates>("All");
+  const [showHelp, setShowHelp] = useState(false);
 
   const filteredPosts: PostType[] = postsData.filter((post) => {
     const matchesText =
@@ -27,6 +29,12 @@ function HomeComponent() {
 
   return (
     <main className="flex flex-col justify-center items-center p-10 bg-[#f0f2f5]">
+      <Button onClick={() => setShowHelp((prev) => !prev)} variant={"primary"}>
+        {showHelp ? "Hide Instuction" : "Show instruction"}
+      </Button>
+
+      {showHelp && <p>Tips: Can manage students list.</p>}
+
       <h1 className="text-2xl font-bold mb-6">News List</h1>
 
       <SearchBar
