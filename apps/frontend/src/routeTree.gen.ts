@@ -11,7 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TabSystemRouteImport } from './routes/tab-system'
 import { Route as StudentsRouteImport } from './routes/students'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProfileIndexRouteImport } from './routes/profile/index'
+import { Route as FeedIndexRouteImport } from './routes/feed/index'
+import { Route as ProfileSettingsRouteImport } from './routes/profile/settings'
+import { Route as FeedPostIdRouteImport } from './routes/feed/$postId'
 
 const TabSystemRoute = TabSystemRouteImport.update({
   id: '/tab-system',
@@ -23,40 +28,106 @@ const StudentsRoute = StudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const FeedIndexRoute = FeedIndexRouteImport.update({
+  id: '/feed/',
+  path: '/feed/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileSettingsRoute = ProfileSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const FeedPostIdRoute = FeedPostIdRouteImport.update({
+  id: '/feed/$postId',
+  path: '/feed/$postId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/students': typeof StudentsRoute
   '/tab-system': typeof TabSystemRoute
+  '/feed/$postId': typeof FeedPostIdRoute
+  '/profile/settings': typeof ProfileSettingsRoute
+  '/feed/': typeof FeedIndexRoute
+  '/profile/': typeof ProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/students': typeof StudentsRoute
   '/tab-system': typeof TabSystemRoute
+  '/feed/$postId': typeof FeedPostIdRoute
+  '/profile/settings': typeof ProfileSettingsRoute
+  '/feed': typeof FeedIndexRoute
+  '/profile': typeof ProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/students': typeof StudentsRoute
   '/tab-system': typeof TabSystemRoute
+  '/feed/$postId': typeof FeedPostIdRoute
+  '/profile/settings': typeof ProfileSettingsRoute
+  '/feed/': typeof FeedIndexRoute
+  '/profile/': typeof ProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/students' | '/tab-system'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/students'
+    | '/tab-system'
+    | '/feed/$postId'
+    | '/profile/settings'
+    | '/feed/'
+    | '/profile/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/students' | '/tab-system'
-  id: '__root__' | '/' | '/students' | '/tab-system'
+  to:
+    | '/'
+    | '/students'
+    | '/tab-system'
+    | '/feed/$postId'
+    | '/profile/settings'
+    | '/feed'
+    | '/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/profile'
+    | '/students'
+    | '/tab-system'
+    | '/feed/$postId'
+    | '/profile/settings'
+    | '/feed/'
+    | '/profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   StudentsRoute: typeof StudentsRoute
   TabSystemRoute: typeof TabSystemRoute
+  FeedPostIdRoute: typeof FeedPostIdRoute
+  FeedIndexRoute: typeof FeedIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -82,13 +160,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/feed/': {
+      id: '/feed/'
+      path: '/feed'
+      fullPath: '/feed/'
+      preLoaderRoute: typeof FeedIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/settings': {
+      id: '/profile/settings'
+      path: '/settings'
+      fullPath: '/profile/settings'
+      preLoaderRoute: typeof ProfileSettingsRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/feed/$postId': {
+      id: '/feed/$postId'
+      path: '/feed/$postId'
+      fullPath: '/feed/$postId'
+      preLoaderRoute: typeof FeedPostIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface ProfileRouteChildren {
+  ProfileSettingsRoute: typeof ProfileSettingsRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileSettingsRoute: ProfileSettingsRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   StudentsRoute: StudentsRoute,
   TabSystemRoute: TabSystemRoute,
+  FeedPostIdRoute: FeedPostIdRoute,
+  FeedIndexRoute: FeedIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

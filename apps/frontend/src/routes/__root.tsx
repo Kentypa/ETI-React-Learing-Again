@@ -1,40 +1,18 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Layout } from "../shared/components/molecules/Layout/Layout";
 
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: () => (
+    <div className="p-10 text-xl font-bold">Page not found 404</div>
+  ),
 });
 
 function RootComponent() {
   return (
     <>
-      <header className="p-2 flex gap-6 text-lg bg-neutral-800 text-neutral-50">
-        <Link
-          to="/"
-          activeProps={{
-            className: "font-bold",
-          }}
-          activeOptions={{ exact: true }}
-        >
-          Home
-        </Link>{" "}
-        <Link
-          to="/students"
-          activeProps={{
-            className: "font-bold",
-          }}
-        >
-          Students
-        </Link>
-        <Link
-          to="/tab-system"
-          activeProps={{
-            className: "font-bold",
-          }}
-        >
-          Tab system
-        </Link>
-      </header>
+      <Layout />
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />
     </>

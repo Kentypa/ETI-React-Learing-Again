@@ -80,7 +80,7 @@ export const AddStudentForm: FC<Props> = ({ onAdd }) => {
 
       <Button
         type="submit"
-        disabled={!isValid}
+        disabled={touched && !isValid}
         className="hover:cursor-not-allowed bg-blue-500 disabled:opacity-50"
         variant="primary"
       >

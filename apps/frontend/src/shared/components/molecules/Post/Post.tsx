@@ -1,15 +1,23 @@
+import { Link } from "@tanstack/react-router";
 import type { FC } from "react";
 import type { PostType } from "../../../../mock/mock-data";
-import { Card } from "../Card/Card";
 import { Button } from "../../atoms/Button/Button";
+import { Card } from "../Card/Card";
 import styles from "./Post.module.css";
 
 type PostProps = Pick<
   PostType,
-  "author" | "avatar" | "content" | "date" | "tag"
+  "id" | "author" | "avatar" | "content" | "date" | "tag"
 >;
 
-export const Post: FC<PostProps> = ({ author, avatar, content, date, tag }) => {
+export const Post: FC<PostProps> = ({
+  id,
+  author,
+  avatar,
+  content,
+  date,
+  tag,
+}) => {
   return (
     <Card>
       <div className={styles.header}>
@@ -24,8 +32,10 @@ export const Post: FC<PostProps> = ({ author, avatar, content, date, tag }) => {
       <p className={styles.content}>{content}</p>
 
       <div className={styles.actions}>
+        <Link to={`/feed/$postId`} params={{ postId: String(id) }}>
+          <Button variant="primary">Read more</Button>
+        </Link>
         <Button variant="secondary">Like</Button>
-        <Button variant="primary">Comment</Button>
       </div>
     </Card>
   );
