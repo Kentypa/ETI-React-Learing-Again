@@ -13,7 +13,7 @@ export const Route = createFileRoute("/students")({
 
 function RouteComponent() {
   const [filterActive, setFilterActive] = useState(false);
-  const [students, setStudents] = useState(studentsData)
+  const [students, setStudents] = useState(studentsData);
 
   return (
     <main className="flex gap-10 justify-center items-center bg-[#f0f2f5] p-10">
@@ -42,7 +42,7 @@ function RouteComponent() {
       <AddStudentForm
         onAdd={(s) => {
           console.log(s);
-          setStudents([...students, s])
+          setStudents([...students, s]);
         }}
       />
     </main>

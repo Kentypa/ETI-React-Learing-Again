@@ -5,7 +5,7 @@ type StudentsListProps = {
   students: StudentData[];
 };
 
-export const StudentsAvarageList: FC<StudentsListProps> = ({ students }) => {
+export const StudentsAverageList: FC<StudentsListProps> = ({ students }) => {
   const activeStudents = students.filter(
     (student) => (student.score || 0) >= 60,
   );

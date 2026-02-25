@@ -30,7 +30,7 @@ function HomeComponent() {
   return (
     <main className="flex flex-col justify-center items-center p-10 bg-[#f0f2f5]">
       <Button onClick={() => setShowHelp((prev) => !prev)} variant={"primary"}>
-        {showHelp ? "Hide Instuction" : "Show instruction"}
+        {showHelp ? "Hide Instruction" : "Show instruction"}
       </Button>
 
       {showHelp && <p>Tips: Can manage students list.</p>}
