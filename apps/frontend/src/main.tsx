@@ -7,7 +7,6 @@ import {
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
-import { NotFound } from "./shared/components/pages/NotFound";
 import "./styles.css";
 
 const hashHistory = createHashHistory();
@@ -18,7 +17,6 @@ const router = createRouter({
   scrollRestoration: true,
   history: hashHistory,
   basepath: "/ETI-React-Learing-Again/",
-  defaultNotFoundComponent: () => <NotFound />,
 });
 
 declare module "@tanstack/react-router" {
