@@ -37,6 +37,9 @@ export const Layout: FC = () => {
         <Link to="/tab-system" activeProps={{ className: "font-bold" }}>
           Tab system
         </Link>
+        <Link to="/product" activeProps={{ className: "font-bold" }}>
+          Product page
+        </Link>
         <Link to="/profile" activeProps={{ className: "font-bold" }}>
           Profile
         </Link>

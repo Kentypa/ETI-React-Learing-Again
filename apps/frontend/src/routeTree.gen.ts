@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TabSystemRouteImport } from './routes/tab-system'
 import { Route as StudentsRouteImport } from './routes/students'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as ProductRouteImport } from './routes/product'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FeedIndexRouteImport } from './routes/feed/index'
@@ -33,6 +34,11 @@ const StudentsRoute = StudentsRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductRoute = ProductRouteImport.update({
+  id: '/product',
+  path: '/product',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -74,6 +80,7 @@ const AuthenticatedProfileSettingsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/product': typeof ProductRoute
   '/sign-in': typeof SignInRoute
   '/students': typeof StudentsRoute
   '/tab-system': typeof TabSystemRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/product': typeof ProductRoute
   '/sign-in': typeof SignInRoute
   '/students': typeof StudentsRoute
   '/tab-system': typeof TabSystemRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/product': typeof ProductRoute
   '/sign-in': typeof SignInRoute
   '/students': typeof StudentsRoute
   '/tab-system': typeof TabSystemRoute
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/product'
     | '/sign-in'
     | '/students'
     | '/tab-system'
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/product'
     | '/sign-in'
     | '/students'
     | '/tab-system'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/product'
     | '/sign-in'
     | '/students'
     | '/tab-system'
@@ -145,6 +157,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  ProductRoute: typeof ProductRoute
   SignInRoute: typeof SignInRoute
   StudentsRoute: typeof StudentsRoute
   TabSystemRoute: typeof TabSystemRoute
@@ -173,6 +186,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product': {
+      id: '/product'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof ProductRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -255,6 +275,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  ProductRoute: ProductRoute,
   SignInRoute: SignInRoute,
   StudentsRoute: StudentsRoute,
   TabSystemRoute: TabSystemRoute,
