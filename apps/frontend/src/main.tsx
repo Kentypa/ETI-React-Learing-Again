@@ -7,6 +7,8 @@ import {
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
+import { useAuth } from "./shared/context/AuthContext";
+import { AuthProvider } from "./shared/context/AuthProvider";
 import "./styles.css";
 
 const hashHistory = createHashHistory();
@@ -17,6 +19,7 @@ const router = createRouter({
   scrollRestoration: true,
   history: hashHistory,
   basepath: "/ETI-React-Learing-Again/",
+  context: { auth: undefined! },
 });
 
 declare module "@tanstack/react-router" {
@@ -29,12 +32,21 @@ const rootElement = document.getElementById("root")!;
 
 const queryClient = new QueryClient();
 
+
 if (!rootElement.innerHTML) {
+  function App() {
+    const auth = useAuth();
+    return <RouterProvider router={router} context={{ auth }} />;
+  }
+
   const root = ReactDOM.createRoot(rootElement);
+
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </QueryClientProvider>
     </StrictMode>,
   );

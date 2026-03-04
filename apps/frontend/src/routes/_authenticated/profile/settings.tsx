@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Button } from "../../shared/components/atoms/Button/Button";
+import { Button } from "../../../shared/components/atoms/Button/Button";
 
-export const Route = createFileRoute("/profile/settings")({
+export const Route = createFileRoute("/_authenticated/profile/settings")({
   component: ProfileSettings,
 });
 
