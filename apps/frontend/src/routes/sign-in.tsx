@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   createFileRoute,
   useNavigate,
@@ -6,6 +7,7 @@ import {
 import { useState, type SubmitEventHandler } from "react";
 import { Button } from "../shared/components/atoms/Button/Button";
 import { useAuth } from "../shared/context/AuthContext";
+import { userKeys } from "../shared/keys/user-keys";
 
 type LoginSearch = { redirect?: string };
 
@@ -23,11 +25,15 @@ function LoginComponent() {
   const { redirect } = Route.useSearch();
   const router = useRouter();
 
+  const { data: userData, isError, isSuccess } = useQuery(userKeys.detail(1));
+
+  if (isError) return <div>error</div>;
+
   const handleSubmit: SubmitEventHandler = async (e) => {
     e.preventDefault();
     if (!email) return;
 
-    login({ email });
+    if (isSuccess) login({ ...userData.data, email });
 
     await router.invalidate();
 

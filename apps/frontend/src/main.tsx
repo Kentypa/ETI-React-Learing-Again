@@ -32,7 +32,6 @@ const rootElement = document.getElementById("root")!;
 
 const queryClient = new QueryClient();
 
-
 if (!rootElement.innerHTML) {
   function App() {
     const auth = useAuth();

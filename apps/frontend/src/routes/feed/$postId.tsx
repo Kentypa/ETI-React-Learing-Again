@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { postsData } from "../../mock/mock-data";
 import { Button } from "../../shared/components/atoms/Button/Button";
+import { feedKeys } from "../../shared/keys/feed-keys";
 
 export const Route = createFileRoute("/feed/$postId")({
   component: PostPage,
@@ -9,9 +10,13 @@ export const Route = createFileRoute("/feed/$postId")({
 function PostPage() {
   const { postId } = Route.useParams();
   const navigate = useNavigate();
-  const post = postsData.find((p) => p.id === Number(postId));
+  const { data: post, isLoading, isError } = useQuery(feedKeys.detail(+postId));
 
-  if (!post) {
+  if (isLoading) return <div>Post is loading</div>;
+
+  if (isError) return <div>Post loading error</div>;
+
+  if (!post?.data) {
     return <div className="p-10 font-bold text-red-500">Post not found</div>;
   }
 
@@ -21,17 +26,11 @@ function PostPage() {
         Back
       </Button>
       <header className="flex items-center gap-4 mt-6">
-        <img
-          src={post.avatar}
-          alt="avatar"
-          className="w-12 h-12 rounded-full"
-        />
         <div>
-          <h1 className="font-bold text-xl">{post.author}</h1>
-          <span className="text-sm text-neutral-500">{post.date}</span>
+          <h1 className="font-bold text-xl">{post.data.title}</h1>
         </div>
       </header>
-      <p className="text-lg mt-4">{post.content}</p>
+      <p className="text-lg mt-4">{post.data.body}</p>
     </article>
   );
 }

@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
+import type { UserType } from "../types/user-type";
 
-export type UserContext = { email: string };
+export type UserContext = UserType;
 
 export type AuthContextType = {
   isAuthenticated: boolean;
