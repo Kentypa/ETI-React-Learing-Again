@@ -13,6 +13,7 @@ import { Route as TabSystemRouteImport } from './routes/tab-system'
 import { Route as StudentsRouteImport } from './routes/students'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as ProductRouteImport } from './routes/product'
+import { Route as CocktailsRouteImport } from './routes/cocktails'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FeedIndexRouteImport } from './routes/feed/index'
@@ -39,6 +40,11 @@ const SignInRoute = SignInRouteImport.update({
 const ProductRoute = ProductRouteImport.update({
   id: '/product',
   path: '/product',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CocktailsRoute = CocktailsRouteImport.update({
+  id: '/cocktails',
+  path: '/cocktails',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -80,6 +86,7 @@ const AuthenticatedProfileSettingsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cocktails': typeof CocktailsRoute
   '/product': typeof ProductRoute
   '/sign-in': typeof SignInRoute
   '/students': typeof StudentsRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cocktails': typeof CocktailsRoute
   '/product': typeof ProductRoute
   '/sign-in': typeof SignInRoute
   '/students': typeof StudentsRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/cocktails': typeof CocktailsRoute
   '/product': typeof ProductRoute
   '/sign-in': typeof SignInRoute
   '/students': typeof StudentsRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cocktails'
     | '/product'
     | '/sign-in'
     | '/students'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cocktails'
     | '/product'
     | '/sign-in'
     | '/students'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/cocktails'
     | '/product'
     | '/sign-in'
     | '/students'
@@ -157,6 +169,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CocktailsRoute: typeof CocktailsRoute
   ProductRoute: typeof ProductRoute
   SignInRoute: typeof SignInRoute
   StudentsRoute: typeof StudentsRoute
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/product'
       fullPath: '/product'
       preLoaderRoute: typeof ProductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cocktails': {
+      id: '/cocktails'
+      path: '/cocktails'
+      fullPath: '/cocktails'
+      preLoaderRoute: typeof CocktailsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -275,6 +295,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CocktailsRoute: CocktailsRoute,
   ProductRoute: ProductRoute,
   SignInRoute: SignInRoute,
   StudentsRoute: StudentsRoute,

@@ -31,6 +31,13 @@ export const Layout: FC = () => {
         >
           Feed
         </Link>
+        <Link
+          to="/cocktails"
+          activeProps={{ className: "font-bold" }}
+          activeOptions={{ exact: true }}
+        >
+          Cocktails
+        </Link>
         <Link to="/students" activeProps={{ className: "font-bold" }}>
           Students
         </Link>
