@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "../../shared/components/atoms/Button/Button";
 import { Post } from "../../shared/components/molecules/Post/Post";
 import { SearchBar } from "../../shared/components/molecules/SearchBar";
+import { useWindowSize } from "../../shared/hooks/useWindowSize";
 import { feedKeys } from "../../shared/keys/feed-keys";
 import { feedService } from "../../shared/services/feed-service";
 
@@ -20,10 +21,34 @@ export const Route = createFileRoute("/feed/")({
   component: RouteComponent,
 });
 
+const generateHeavyAnalytics = (num: number) => {
+  console.log("Starting hard calculating");
+  let result = 0;
+  for (let i = 0; i < 500_000_000; i++) {
+    result += num;
+  }
+  return result;
+};
+
 function RouteComponent() {
   const { query, sort } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [showHelp, setShowHelp] = useState(false);
+  const { width } = useWindowSize();
+  const isMobile = width < 768;
+
+  const [inputValue, setInputValue] = useState("");
+  const [analyticsNumber, setAnalyticsNumber] = useState(1);
+
+  // БЕЗ ОПТИМІЗАЦІЇ: При кожному натисканні клавіші в інпуті інтерфейс буде висіти.
+  // const analyticsResult = generateHeavyAnalytics(analyticsNumber);
+
+  // З ОПТИМІЗАЦІЄЮ: Функція запуститься лише при зміні analyticsNumber.
+  // Введення тексту в інпут працюватиме миттєво.
+  const analyticsResult = useMemo(
+    () => generateHeavyAnalytics(analyticsNumber),
+    [analyticsNumber],
+  );
 
   const {
     data: postsData,
@@ -94,17 +119,44 @@ function RouteComponent() {
         </div>
       </div>
 
-      <ul className="flex flex-col gap-4 border-2 p-4 rounded-md w-full max-w-xl bg-white">
+      <ul
+        className={`gap-4 w-full max-w-4xl ${
+          isMobile ? "flex flex-col" : "grid grid-cols-2"
+        }`}
+      >
         {processedPosts.length === 0 ? (
-          <p className="text-center text-gray-500">No posts found 📭</p>
+          <p className="col-span-full text-center text-gray-500">
+            No posts found
+          </p>
         ) : (
           processedPosts.slice(0, 10).map((post) => (
-            <li key={post.id}>
+            <li key={post.id} className="border-2 p-4 rounded-md bg-white">
               <Post {...post} />
             </li>
           ))
         )}
       </ul>
+
+      <div className="bg-blue-50 p-4 rounded mb-6 text-left">
+        <p className="font-bold">Analytics (Hard calculating):</p>
+        <p>Result: {analyticsResult}</p>
+        <Button
+          onClick={() => setAnalyticsNumber((n) => n + 1)}
+          variant="secondary"
+          className="mt-2 text-sm"
+        >
+          Update analytics
+        </Button>
+      </div>
+
+      <div className="mb-6">
+        <input
+          placeholder="Print here (Lag testing)..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="border-2 p-2 w-full rounded"
+        />
+      </div>
     </main>
   );
 }
