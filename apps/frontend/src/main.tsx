@@ -18,7 +18,7 @@ const router = createRouter({
   defaultPreload: "intent",
   scrollRestoration: true,
   history: hashHistory,
-  basepath: "/ETI-React-Learing-Again/",
+  basepath: "/",
   context: { auth: undefined! },
 });
 

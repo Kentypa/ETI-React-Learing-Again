@@ -5,7 +5,7 @@ import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  base: "/ETI-React-Learing-Again/",
+  base: "/",
   plugins: [
     tanstackRouter({
       target: "react",
