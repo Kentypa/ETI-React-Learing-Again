@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
-import tailwindcss from "@tailwindcss/vite";
 import svgr from "vite-plugin-svgr";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   base: "/ETI-React-Learing-Again/",
@@ -19,4 +19,9 @@ export default defineConfig({
       exclude: "",
     }),
   ],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+  },
 });
