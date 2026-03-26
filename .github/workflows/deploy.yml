@@ -3,6 +3,8 @@ name: Deploy Frontend
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -15,10 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,10 +28,29 @@ jobs:
           cache: "yarn"
           cache-dependency-path: apps/frontend/yarn.lock
 
-      - name: Install & Build
+      - name: Install Dependencies
         run: |
           cd apps/frontend
           yarn install --frozen-lockfile
+
+      - name: Check Linting
+        run: |
+          cd apps/frontend
+          yarn lint
+
+      - name: Check TypeScript Types
+        run: |
+          cd apps/frontend
+          yarn tsc --noEmit
+
+      - name: Run Unit Tests
+        run: |
+          cd apps/frontend
+          yarn test --run
+
+      - name: Build
+        run: |
+          cd apps/frontend
           yarn build
 
       - uses: actions/configure-pages@v5
@@ -41,5 +59,13 @@ jobs:
         with:
           path: apps/frontend/dist
 
+  deploy:
+    needs: test-and-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
