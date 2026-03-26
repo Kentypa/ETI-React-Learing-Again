@@ -18,7 +18,7 @@ const router = createRouter({
   defaultPreload: "intent",
   scrollRestoration: true,
   history: hashHistory,
-  basepath: "/",
+  basepath: import.meta.env.BASE_URL,
   context: { auth: undefined! },
 });
 
