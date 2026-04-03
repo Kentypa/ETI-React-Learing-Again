@@ -5,15 +5,14 @@ import {
   type FC,
   type SubmitEventHandler,
 } from "react";
-import type { StudentData } from "../../../../mock/students-data";
+import { useStudentsStore } from "../../../store/useStudentsScore";
 import { Button } from "../../atoms/Button/Button";
 import { Input } from "../../atoms/Input/Input";
 
-type Props = { onAdd: (student: StudentData) => void };
-
 const INITIAL_STATE = { name: "", score: "" };
 
-export const AddStudentForm: FC<Props> = ({ onAdd }) => {
+export const AddStudentForm: FC = () => {
+  const addStudent = useStudentsStore((s) => s.addStudent);
   const [form, setForm] = useState(INITIAL_STATE);
   const [touched, setTouched] = useState(false);
 
@@ -30,12 +29,12 @@ export const AddStudentForm: FC<Props> = ({ onAdd }) => {
 
   const isValid = !errors.name && !errors.score;
 
-  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: SubmitEventHandler = (e) => {
     e.preventDefault();
     setTouched(true);
     if (!isValid) return;
 
-    onAdd({
+    addStudent({
       id: Date.now(),
       name: form.name.trim(),
       score: Number(form.score),
@@ -78,12 +77,30 @@ export const AddStudentForm: FC<Props> = ({ onAdd }) => {
         )}
       </div>
 
-      <Button
-        type="submit"
-        disabled={touched && !isValid}
-        className="hover:cursor-not-allowed bg-blue-500 disabled:opacity-50"
-        variant="primary"
-      >
+      <div className="flex flex-col gap-1">
+        <Input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Student Name"
+        />
+        {touched && errors.name && (
+          <span className="text-xs text-red-500">{errors.name}</span>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <Input
+          name="score"
+          type="number"
+          value={form.score}
+          onChange={handleChange}
+          placeholder="Score (0-100)"
+        />
+        {touched && errors.score && (
+          <span className="text-xs text-red-500">{errors.score}</span>
+        )}
+      </div>
+      <Button type="submit" disabled={touched && !isValid} variant="primary">
         Add
       </Button>
     </form>

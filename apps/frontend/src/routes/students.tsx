@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useState } from "react";
-import { studentsData } from "../mock/students-data";
+import { useState } from "react";
 import { Button } from "../shared/components/atoms/Button/Button";
 import { AddStudentForm } from "../shared/components/molecules/AddStudentForm/AddStudentForm";
+import { StudentsAverageList } from "../shared/components/molecules/StudentAverageScoreList";
 import { StudentItem } from "../shared/components/molecules/StudentItem";
+import { useStudentsStore } from "../shared/store/useStudentsScore";
 
 export const Route = createFileRoute("/students")({
   component: RouteComponent,
@@ -11,13 +12,7 @@ export const Route = createFileRoute("/students")({
 
 function RouteComponent() {
   const [filterActive, setFilterActive] = useState(false);
-  const [students, setStudents] = useState(studentsData);
-
-  // ✅ ОПТИМІЗАЦІЯ: useCallback запам'ятовує функцію.
-  // Тепер React.memo в StudentItem працюватиме коректно.
-  const handleDelete = useCallback((id: number) => {
-    setStudents((prev) => prev.filter((s) => s.id !== id));
-  }, []);
+  const students = useStudentsStore((s) => s.students);
 
   return (
     <main className="flex gap-10 justify-center items-start bg-[#f0f2f5] p-10 min-h-screen">
@@ -37,19 +32,16 @@ function RouteComponent() {
             {students
               .filter((s) => (filterActive ? (s.score || 0) >= 60 : true))
               .map((student) => (
-                <StudentItem
-                  key={student.id}
-                  {...student}
-                  onDelete={handleDelete}
-                />
+                <StudentItem key={student.id} {...student} />
               ))}
           </ol>
         </div>
+        <StudentsAverageList students={students} />
       </div>
 
       <div className="w-full max-w-sm">
         <h3 className="font-bold mb-4 text-center">Add new</h3>
-        <AddStudentForm onAdd={(s) => setStudents((prev) => [...prev, s])} />
+        <AddStudentForm />
       </div>
     </main>
   );

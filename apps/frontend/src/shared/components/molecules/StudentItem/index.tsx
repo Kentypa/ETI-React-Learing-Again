@@ -1,13 +1,9 @@
 import { memo, type FC } from "react";
 import type { StudentData } from "../../../../mock/students-data";
+import { useStudentsStore } from "../../../store/useStudentsScore";
 
-type Props = StudentData & {
-  onDelete?: (id: number) => void;
-};
-
-export const StudentItem: FC<Props> = memo(({ id, name, score, onDelete }) => {
-  // Цей лог допоможе побачити в консолі, чи рендериться компонент зайвий раз
-  console.log(`Рендер студента: ${name}`);
+export const StudentItem: FC<StudentData> = memo(({ id, name, score }) => {
+  const deleteStudent = useStudentsStore((s) => s.deleteStudent);
 
   if (score === undefined) {
     return (
@@ -15,7 +11,7 @@ export const StudentItem: FC<Props> = memo(({ id, name, score, onDelete }) => {
         <span>
           {name}: <span className="text-neutral-500">No marks</span>
         </span>
-        {onDelete && <button onClick={() => onDelete(id)}>❌</button>}
+        <button onClick={() => deleteStudent(id)}>❌</button>
       </li>
     );
   }
@@ -29,14 +25,11 @@ export const StudentItem: FC<Props> = memo(({ id, name, score, onDelete }) => {
         <span
           style={{ color: isCredited ? "green" : "red" }}
           className="ml-2 font-bold"
-        >
-          {`${score} ${isCredited ? "Credited" : "Not credited"}`}
-        </span>
+        >{`${score} ${isCredited ? "Credited" : "Not credited"}`}</span>
       </span>
-      {onDelete && <button onClick={() => onDelete(id)}>❌</button>}
+      <button onClick={() => deleteStudent(id)}>❌</button>
     </li>
   );
 });
 
-// Додаємо displayName для кращого відображення в React DevTools
 StudentItem.displayName = "StudentItem";
