@@ -63,31 +63,6 @@ export const AddStudentForm: FC = () => {
           <span className="text-xs text-red-500">{errors.name}</span>
         )}
       </div>
-
-      <div className="flex flex-col gap-1">
-        <Input
-          name="score"
-          type="number"
-          value={form.score}
-          onChange={handleChange}
-          placeholder="Score (0-100)"
-        />
-        {touched && errors.score && (
-          <span className="text-xs text-red-500">{errors.score}</span>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <Input
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          placeholder="Student Name"
-        />
-        {touched && errors.name && (
-          <span className="text-xs text-red-500">{errors.name}</span>
-        )}
-      </div>
       <div className="flex flex-col gap-1">
         <Input
           name="score"
